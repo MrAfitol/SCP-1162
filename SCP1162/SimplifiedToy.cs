@@ -1,14 +1,52 @@
-using PluginAPI.Core;
-
 namespace SCP1162
 {
     using AdminToys;
     using Mirror;
     using UnityEngine;
 
+    // The code is taken from the genius Jesus-QC and little changed by me
     public class SimplifiedToy
     {
+        /// <summary>
+        /// A primitive type
+        /// </summary>
+        public PrimitiveType Type;
+
+        /// <summary>
+        /// A primitive position 
+        /// </summary>
+        public Vector3 Position;
+
+        /// <summary>
+        /// A primitive rotation 
+        /// </summary>
+        public Vector3 Rotation;
+
+        /// <summary>
+        /// A primitive scale 
+        /// </summary>
+        public Vector3 Scale;
+
+        /// <summary>
+        /// A primitive color 
+        /// </summary>
+        public Color PrimitiveColor;
+
+        /// <summary>
+        /// A primitive transparency
+        /// </summary>
+        public float Alpha;
+
+        /// <summary>
+        /// A primitive parent
+        /// </summary>
+        public Transform Parent;
+
+        /// <summary>
+        /// A primitive base
+        /// </summary>
         public PrimitiveObjectToy Base;
+
         private PrimitiveObjectToy ToyPrefab
         {
             get
@@ -24,14 +62,16 @@ namespace SCP1162
             }
         }
 
-        public PrimitiveType Type;
-        public Vector3 Position;
-        public Vector3 Rotation;
-        public Vector3 Scale;
-        public Color PrimitiveColor;
-        public float Alpha = 1f;
-        public Transform Parent;
-
+        /// <summary>
+        /// Create primitive object
+        /// </summary>
+        /// <param name="type">The primitive type</param>
+        /// <param name="position">The primitive position</param>
+        /// <param name="rotation">The primitive rotation</param>
+        /// <param name="scale">The primitive scale</param>
+        /// <param name="color">The primitive color</param>
+        /// <param name="parent">The primitive parent</param>
+        /// <param name="alpha">The primitive transparency</param>
         public SimplifiedToy(PrimitiveType type ,Vector3 position, Vector3 rotation, Vector3 scale, Color color, Transform parent = null, float alpha = 1f)
         {
             this.Type = type;
@@ -43,7 +83,11 @@ namespace SCP1162
             this.Parent = parent;
         }
 
-        public GameObject Spawn()
+        /// <summary>
+        /// Spawn primitive
+        /// </summary>
+        /// <returns>Returns the created primitive</returns>
+        public PrimitiveObjectToy Spawn()
         {
             var toy = Object.Instantiate(ToyPrefab);
 
@@ -61,7 +105,7 @@ namespace SCP1162
 
             NetworkServer.Spawn(toy.gameObject);
             
-            return toy.gameObject;
+            return toy;
         }
     }
 }

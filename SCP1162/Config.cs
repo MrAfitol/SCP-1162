@@ -11,6 +11,12 @@ namespace SCP1162
         [Description("From what distance can SCP-1162 be used?")]
         public float SCP1162Distance { get; set; } = 2f;
 
+        [Description("Will the hands be cut off if the item is not in the hands?")]
+        public bool CuttingHands { get; set; } = true;
+
+        [Description("What is the chance that the hands will be cut off if the item is not in the hands")]
+        public int ChanceCutting { get; set; } = 40;
+
         [Description("List of items that may drop from SCP-1162")]
         public List<ItemType> DroppingItems { get; set; } = new List<ItemType>
         {

@@ -1,15 +1,16 @@
-using InventorySystem;
-using InventorySystem.Items;
-using PluginAPI.Core;
-
 namespace SCP1162
 {
-    using PluginAPI.Enums;
     using UnityEngine;
     using System.Linq;
-    using PluginAPI.Core.Zones;
+    using InventorySystem;
+    using InventorySystem.Items;
     using PluginAPI.Core.Attributes;
-    
+    using PluginAPI.Core.Zones;
+    using PluginAPI.Enums;
+    using PluginAPI.Core;
+    using Random = UnityEngine.Random;
+    using CustomPlayerEffects;
+
     public class EventHandlers
     {
         private Vector3 SCP1162Position;
@@ -35,14 +36,7 @@ namespace SCP1162
         {
             if (Vector3.Distance(SCP1162Position, player.Position) <= Plugin.Instance.Config.SCP1162Distance)
             {
-                var newItemType = Plugin.Instance.Config.DroppingItems.RandomItem();
-
-                player.ReceiveHint(
-                    Plugin.Instance.Config.ItemDropMessage.Replace("{dropitem}", item.ItemTypeId.ToString())
-                        .Replace("{giveitem}", newItemType.ToString()), 2f);
-
-                player.ReferenceHub.inventory.ServerRemoveItem(item.ItemSerial, item.PickupDropModel);
-                player.AddItem(newItemType);
+                OnUseSCP1162(player, item);
             }
         }
 
@@ -51,15 +45,33 @@ namespace SCP1162
         {
             if (Vector3.Distance(SCP1162Position, player.Position) <= Plugin.Instance.Config.SCP1162Distance)
             {
-                var newItemType = Plugin.Instance.Config.DroppingItems.RandomItem();
-
-                player.ReceiveHint(
-                    Plugin.Instance.Config.ItemDropMessage.Replace("{dropitem}", item.ItemTypeId.ToString())
-                        .Replace("{giveitem}", newItemType.ToString()), 2f);
-
-                player.ReferenceHub.inventory.ServerRemoveItem(item.ItemSerial, item.PickupDropModel);
-                player.AddItem(newItemType);
+                OnUseSCP1162(player, item);
             }
+        }
+
+        private void OnUseSCP1162(Player player, ItemBase item)
+        {
+            if (Plugin.Instance.Config.CuttingHands)
+            {
+                if (player.CurrentItem != item)
+                {
+                    if (Plugin.Instance.Config.ChanceCutting >= Random.Range(0, 101))
+                    {
+                        player.EffectsManager.EnableEffect<SeveredHands>(1000);
+                        return;
+                    }
+                }
+            }
+
+
+            var newItemType = Plugin.Instance.Config.DroppingItems.RandomItem();
+
+            player.ReceiveHint(
+            Plugin.Instance.Config.ItemDropMessage.Replace("{dropitem}", item.ItemTypeId.ToString())
+                    .Replace("{giveitem}", newItemType.ToString()), 2f);
+
+            player.ReferenceHub.inventory.ServerRemoveItem(item.ItemSerial, item.PickupDropModel);
+            player.AddItem(newItemType);
         }
     }
 }
