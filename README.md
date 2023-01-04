@@ -22,6 +22,10 @@ A plugin that adds SCP-1162
 item_drop_message: <b>You dropped a <color=green>{dropitem}</color> through <color=yellow>SCP-1162</color>, and received a <color=red>{giveitem}</color></b>
 # From what distance can SCP-1162 be used?
 s_c_p1162_distance: 2
+# Will the hands be cut off if the item is not in the hands?
+cutting_hands: true
+# What is the chance that the hands will be cut off if the item is not in the hands
+chance_cutting: 40
 # List of items that may drop from SCP-1162
 dropping_items:
 - SCP500
