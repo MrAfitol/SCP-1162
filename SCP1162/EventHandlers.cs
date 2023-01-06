@@ -24,7 +24,6 @@ namespace SCP1162
         public void Spawn1162()
         {
             var Room = LightZone.Rooms.FirstOrDefault(x => x.GameObject.name == "LCZ_173");
-            Log.Debug(Room.Position.ToString());
             var scp1162 = new SimplifiedToy(PrimitiveType.Cylinder, new Vector3(17f, 13f, 3.59f), new Vector3(90f, 0f, 0f),
                 new Vector3(1.3f, 0.1f, 1.3f), Color.black, Room.Transform, 0.95f).Spawn();
 
@@ -34,6 +33,7 @@ namespace SCP1162
         [PluginEvent(ServerEventType.PlayerDropItem)]
         public void OnPlayerDroppedItem(Player player, ItemBase item)
         {
+            if (!Round.IsRoundStarted) return;
             if (Vector3.Distance(SCP1162Position, player.Position) <= Plugin.Instance.Config.SCP1162Distance)
             {
                 OnUseSCP1162(player, item);
@@ -43,6 +43,7 @@ namespace SCP1162
         [PluginEvent(ServerEventType.PlayerThrowItem)]
         public void OnThrowItem(Player player, ItemBase item, Rigidbody rb)
         {
+            if (!Round.IsRoundStarted) return;
             if (Vector3.Distance(SCP1162Position, player.Position) <= Plugin.Instance.Config.SCP1162Distance)
             {
                 OnUseSCP1162(player, item);
