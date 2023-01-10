@@ -17,6 +17,9 @@ namespace SCP1162
         [Description("What is the chance that the hands will be cut off if the item is not in the hands")]
         public int ChanceCutting { get; set; } = 40;
 
+        [Description("If this item is enabled, the hands will not be cut off only when the player threw item")]
+        public bool OnlyThrow { get; set; } = false;
+
         [Description("List of items that may drop from SCP-1162")]
         public List<ItemType> DroppingItems { get; set; } = new List<ItemType>
         {

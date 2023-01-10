@@ -34,6 +34,11 @@ namespace SCP1162
         public void OnPlayerDroppedItem(Player player, ItemBase item)
         {
             if (!Round.IsRoundStarted) return;
+            if (Plugin.Instance.Config.OnlyThrow)
+            {
+                player.EffectsManager.EnableEffect<SeveredHands>(1000);
+                return;
+            }
             if (Vector3.Distance(SCP1162Position, player.Position) <= Plugin.Instance.Config.SCP1162Distance)
             {
                 OnUseSCP1162(player, item);
