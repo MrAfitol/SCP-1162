@@ -41,6 +41,19 @@ namespace SCP1162
                     player.EffectsManager.EnableEffect<SeveredHands>(1000);
                     return;
                 }
+
+                if (Plugin.Instance.Config.CuttingHands)
+                {
+                    if (player.CurrentItem != item)
+                    {
+                        if (Plugin.Instance.Config.ChanceCutting >= Random.Range(0, 101))
+                        {
+                            player.EffectsManager.EnableEffect<SeveredHands>(1000);
+                            return;
+                        }
+                    }
+                }
+
                 OnUseSCP1162(player, item);
             }
         }
@@ -57,19 +70,6 @@ namespace SCP1162
 
         private void OnUseSCP1162(Player player, ItemBase item)
         {
-            if (Plugin.Instance.Config.CuttingHands)
-            {
-                if (player.CurrentItem != item)
-                {
-                    if (Plugin.Instance.Config.ChanceCutting >= Random.Range(0, 101))
-                    {
-                        player.EffectsManager.EnableEffect<SeveredHands>(1000);
-                        return;
-                    }
-                }
-            }
-
-
             var newItemType = Plugin.Instance.Config.DroppingItems.RandomItem();
 
             player.ReceiveHint(
