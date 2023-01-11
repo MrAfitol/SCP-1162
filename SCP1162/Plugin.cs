@@ -13,7 +13,7 @@
         public Config Config;
 
         [PluginPriority(LoadPriority.Highest)]
-        [PluginEntryPoint("SCP-1162", "1.0.3", "A plugin that adds SCP-1162.", "MrAfitol")]
+        [PluginEntryPoint("SCP-1162", "1.0.4", "A plugin that adds SCP-1162.", "MrAfitol")]
         void LoadPlugin()
         {
             Instance = this;
