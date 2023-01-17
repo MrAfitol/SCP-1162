@@ -10,6 +10,7 @@ namespace SCP1162
     using PluginAPI.Core;
     using Random = UnityEngine.Random;
     using CustomPlayerEffects;
+    using PluginAPI.Core.Items;
 
     public class EventHandlers
     {
@@ -31,41 +32,45 @@ namespace SCP1162
         }
 
         [PluginEvent(ServerEventType.PlayerDropItem)]
-        public void OnPlayerDroppedItem(Player player, ItemBase item)
+        public bool OnPlayerDroppedItem(Player player, ItemBase item)
         {
-            if (!Round.IsRoundStarted) return;
+            if (!Round.IsRoundStarted) return true;
             if (Vector3.Distance(SCP1162Position, player.Position) <= Plugin.Instance.Config.SCP1162Distance)
             {
-                if (Plugin.Instance.Config.OnlyThrow)
-                {
-                    player.EffectsManager.EnableEffect<SeveredHands>(1000);
-                    return;
-                }
-
                 if (Plugin.Instance.Config.CuttingHands)
                 {
+                    if (Plugin.Instance.Config.OnlyThrow)
+                    {
+                        player.EffectsManager.EnableEffect<SeveredHands>(1000);
+                        return true;
+                    }
+
                     if (player.CurrentItem != item)
                     {
                         if (Plugin.Instance.Config.ChanceCutting >= Random.Range(0, 101))
                         {
                             player.EffectsManager.EnableEffect<SeveredHands>(1000);
-                            return;
+                            return true;
                         }
                     }
                 }
 
                 OnUseSCP1162(player, item);
+                return false;
             }
+            return true;
         }
 
         [PluginEvent(ServerEventType.PlayerThrowItem)]
-        public void OnThrowItem(Player player, ItemBase item, Rigidbody rb)
+        public bool OnThrowItem(Player player, ItemBase item, Rigidbody rb)
         {
-            if (!Round.IsRoundStarted) return;
+            if (!Round.IsRoundStarted) return true;
             if (Vector3.Distance(SCP1162Position, player.Position) <= Plugin.Instance.Config.SCP1162Distance)
             {
                 OnUseSCP1162(player, item);
+                return false;
             }
+            return true;
         }
 
         private void OnUseSCP1162(Player player, ItemBase item)
@@ -76,7 +81,7 @@ namespace SCP1162
             Plugin.Instance.Config.ItemDropMessage.Replace("{dropitem}", item.ItemTypeId.ToString())
                     .Replace("{giveitem}", newItemType.ToString()), 2f);
 
-            player.ReferenceHub.inventory.ServerRemoveItem(item.ItemSerial, item.PickupDropModel);
+            player.RemoveItem(new Item(item));
             player.AddItem(newItemType);
         }
     }
