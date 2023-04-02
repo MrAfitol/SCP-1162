@@ -10,6 +10,7 @@ namespace SCP1162
     using Random = UnityEngine.Random;
     using CustomPlayerEffects;
     using PluginAPI.Core.Items;
+    using InventorySystem.Items.Usables.Scp330;
 
     public class EventHandlers
     {
@@ -32,6 +33,7 @@ namespace SCP1162
         {
             if (!Round.IsRoundStarted) return true;
             if (Vector3.Distance(SCP1162Position, player.Position) > Plugin.Instance.Config.SCP1162Distance) return true;
+            if (item is Scp330Bag) return true;
             
             if (isThrow ? !Plugin.Instance.Config.IgnoreThrow && Plugin.Instance.Config.CuttingChance > 0 : Plugin.Instance.Config.CuttingChance > 0)
             {
