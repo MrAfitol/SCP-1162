@@ -1,6 +1,6 @@
 # SCP-1162
-[![GitHub release](https://flat.badgen.net/github/release/MrAfitol/SCP-1162)](https://github.com/MrAfitol/SCP-1162/releases/)
-![GitHub downloads](https://flat.badgen.net/github/assets-dl/MrAfitol/SCP-1162)
+[![Version](https://img.shields.io/github/v/release/MrAfitol/SCP-1162?sort=semver&style=flat-square&color=blue&label=Version)](https://github.com/MrAfitol/SCP-1162/releases)
+[![Downloads](https://img.shields.io/github/downloads/MrAfitol/SCP-1162/total?style=flat-square&color=yellow&label=Downloads)](https://github.com/MrAfitol/SCP-1162/releases)
 
 
 A plugin that adds SCP-1162
