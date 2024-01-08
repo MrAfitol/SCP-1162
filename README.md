@@ -20,7 +20,7 @@ The idea is taken from the [plugin](https://github.com/SynapseSL/Scp1162)
    - *Run the command in console `p install MrAfitol/SCP-1162`*
 ## Config
 ```yml
-# What message will be displayed when using SCP-1162? ({dropitem} - Thrown or dropped item. {giveitem} - Changed item. {dropstatus} - Replaces the text written in the points below in dependence on the drop status.)
+# What message will be displayed when using Scp-1162? ({dropitem} - Thrown or dropped item. {giveitem} - Changed item. {dropstatus} - Replaces the text written in the points below in dependence on the drop status.)
 item_drop_message:
   message: <b>You {dropstatus} a <color=green>{dropitem}</color> through <color=yellow>SCP-1162</color>, and received a <color=red>{giveitem}</color></b>
   drop_text: dropped
@@ -30,15 +30,17 @@ item_delete_message:
   message: <b>You {dropstatus} a <color=green>{dropitem}</color> through <color=yellow>SCP-1162</color>, and got <color=red>nothing</color></b>
   drop_text: dropped
   throw_text: throwed
-# From what distance can SCP-1162 be used?
-s_c_p1162_distance: 2
+# From what distance can Scp-1162 be used?
+scp1162_distance: 2
+# What is the chance of spawning Scp-1162? (100 = always)
+scp1162_chance_to_spawn: 100
 # What is the chance that the hands will be cut off if the item is not in the hands. (Set to 0 to disable)
 cutting_chance: 30
 # What is the chance that the item will be deleted. (Set to 0 to disable)
 delete_chance: 10
 # If this item is enabled, the hands will not be cut off only when the player threw item.
 ignore_throw: true
-# List of items that may drop from SCP-1162.
+# List of items that may drop from Scp-1162.
 dropping_items:
 - SCP500
 - KeycardContainmentEngineer
@@ -58,7 +60,7 @@ dropping_items:
 - KeycardJanitor
 - Coin
 - Flashlight
-# List of items and their name when using SCP-1162, if the item is not in the list the name will be the default.
+# List of items and their name when using Scp-1162, if the item is not in the list the name will be the default.
 items_name:
   SCP500: SCP-500
   KeycardContainmentEngineer: Containment Engineer Keycard
@@ -78,6 +80,16 @@ items_name:
   KeycardJanitor: Janitor Keycard
   Coin: Coin
   Flashlight: Flashlight
+# Will the gun have a full ammo?
+fill_max_ammo: true
+# Will the gun have a random attachments?
+random_attachments: true
+# The name of the role that can use commands for Scp-1162.
+allowed_rank:
+- owner
+# User ID that can use commands for the Scp-1162.
+allowed_user_i_d:
+- SomeOtherSteamId64@steam
 ```
 ## Wiki
 **Be sure to check out the [Wiki](https://github.com/MrAfitol/SCP-1162/wiki)**

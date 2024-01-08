@@ -1,45 +1,50 @@
 namespace SCP1162
 {
-    using UnityEngine;
-    using System.Linq;
-    using InventorySystem.Items;
-    using PluginAPI.Core.Attributes;
-    using PluginAPI.Core.Zones;
-    using PluginAPI.Enums;
-    using PluginAPI.Core;
-    using Random = UnityEngine.Random;
+    using AdminToys;
     using CustomPlayerEffects;
-    using PluginAPI.Core.Items;
+    using InventorySystem.Items;
+    using InventorySystem.Items.Firearms;
+    using InventorySystem.Items.Firearms.Attachments;
     using InventorySystem.Items.Usables.Scp330;
+    using Mirror;
+    using PluginAPI.Core;
+    using PluginAPI.Core.Attributes;
+    using PluginAPI.Core.Items;
+    using PluginAPI.Core.Zones;
     using PluginAPI.Events;
+    using System.Linq;
+    using UnityEngine;
+    using Random = UnityEngine.Random;
 
     public class EventHandlers
     {
-        private Vector3 SCP1162Position;
-        
-        [PluginEvent]
-        public void OnGenerationMap(MapGeneratedEvent ev)
-        {
-            var Room = LightZone.Rooms.FirstOrDefault(x => x.GameObject.name == "LCZ_173");
-            var scp1162 = new SimplifiedToy(PrimitiveType.Cylinder, new Vector3(17f, 13f, 3.59f), new Vector3(90f, 0f, 0f),
-                new Vector3(1.3f, 0.1f, 1.3f), Color.black, Room.Transform, 0.95f).Spawn();
+        private static Vector3 Scp1162Position;
+        private static PrimitiveObjectToy Scp1162;
 
-            SCP1162Position = scp1162.transform.position;
+        public static bool IsScp1162Spawn
+        {
+            get => Scp1162 != null;
         }
 
         [PluginEvent]
-        public bool OnPlayerDroppedItem(PlayerDropItemEvent ev) { return OnUseSCP1162(ev.Player, ev.Item, ev.Player.CurrentItem == ev.Item); }
+        public void OnGenerationMap(MapGeneratedEvent ev)
+        {
+            if (Plugin.Config.Scp1162ChanceToSpawn >= Random.Range(0, 100)) OnSpawnSCP1162();
+        }
+
+        [PluginEvent]
+        public bool OnPlayerDroppedItem(PlayerDropItemEvent ev) => OnUseSCP1162(ev.Player, ev.Item, ev.Player.CurrentItem == ev.Item);
 
         private bool OnUseSCP1162(Player player, ItemBase item, bool isThrow)
         {
+            if (!IsScp1162Spawn) return true;
             if (!Round.IsRoundStarted) return true;
-            if (Vector3.Distance(SCP1162Position, player.Position) > Plugin.Config.SCP1162Distance) return true;
+            if (Vector3.Distance(Scp1162Position, player.Position) > Plugin.Config.Scp1162Distance) return true;
             if (item is Scp330Bag) return true;
-            
+
             if (isThrow ? !Plugin.Config.IgnoreThrow && Plugin.Config.CuttingChance > 0 : Plugin.Config.CuttingChance > 0)
             {
-
-                if (Plugin.Config.CuttingChance >= Random.Range(0, 101))
+                if (Plugin.Config.CuttingChance >= Random.Range(0, 100))
                 {
                     player.EffectsManager.EnableEffect<SeveredHands>(1000);
                     return true;
@@ -48,7 +53,7 @@ namespace SCP1162
 
             if (Plugin.Config.DeleteChance > 0)
             {
-                if (Plugin.Config.DeleteChance >= Random.Range(0, 101))
+                if (Plugin.Config.DeleteChance >= Random.Range(0, 100))
                 {
                     player.RemoveItem(new Item(item));
                     player.ReceiveHint(Plugin.Config.ItemDeleteMessage.Message
@@ -65,7 +70,23 @@ namespace SCP1162
                         .Replace("{giveitem}", GetItemName(newItemType))
                         .Replace("{dropstatus}", isThrow ? Plugin.Config.ItemDropMessage.ThrowText : Plugin.Config.ItemDropMessage.DropText), 2f);
             player.RemoveItem(new Item(item));
-            player.AddItem(newItemType);
+
+            ItemBase NewItem = player.AddItem(newItemType);
+
+            if (Plugin.Config.FillMaxAmmo || Plugin.Config.RandomAttachments)
+            {
+                if (NewItem is Firearm firearm)
+                {
+                    if (Plugin.Config.RandomAttachments)
+                        firearm.ApplyAttachmentsCode(AttachmentsUtils.GetRandomAttachmentsCode(firearm.ItemTypeId), reValidate: true);
+
+                    FirearmStatusFlags firearmStatusFlags = FirearmStatusFlags.MagazineInserted;
+                    if (firearm.HasAdvantageFlag(AttachmentDescriptiveAdvantages.Flashlight))
+                        firearmStatusFlags |= FirearmStatusFlags.FlashlightEnabled;
+
+                    firearm.Status = new FirearmStatus((Plugin.Config.FillMaxAmmo ? firearm.AmmoManagerModule.MaxAmmo : (byte)0), firearmStatusFlags, firearm.GetCurrentAttachmentsCode());
+                }
+            }
 
             return false;
         }
@@ -74,6 +95,25 @@ namespace SCP1162
         {
             if (Plugin.Config.ItemsName.TryGetValue(itemType, out string itemName)) return itemName;
             return itemType.ToString();
+        }
+
+        public static void OnSpawnSCP1162()
+        {
+            if (Scp1162 != null) return;
+
+            var Room = LightZone.Rooms.FirstOrDefault(x => x.GameObject.name == "LCZ_173");
+            Scp1162 = new SimplifiedToy(PrimitiveType.Cylinder, new Vector3(17f, 13f, 3.59f), new Vector3(90f, 0f, 0f),
+                new Vector3(1.3f, 0.1f, 1.3f), Color.black, Room.Transform, 0.95f).Spawn();
+
+            Scp1162Position = Scp1162.transform.position;
+        }
+
+        public static void OnDespawnSCP1162()
+        {
+            if (Scp1162 == null) return;
+
+            NetworkServer.Destroy(Scp1162.gameObject);
+            Scp1162 = null;
         }
     }
 }
