@@ -72,7 +72,7 @@ namespace SCP1162
         /// <param name="color">The primitive color</param>
         /// <param name="parent">The primitive parent</param>
         /// <param name="alpha">The primitive transparency</param>
-        public SimplifiedToy(PrimitiveType type ,Vector3 position, Vector3 rotation, Vector3 scale, Color color, Transform parent = null, float alpha = 1f)
+        public SimplifiedToy(PrimitiveType type, Vector3 position, Vector3 rotation, Vector3 scale, Color color, Transform parent = null, float alpha = 1f)
         {
             this.Type = type;
             this.Position = position;
@@ -104,7 +104,7 @@ namespace SCP1162
             toy.NetworkMovementSmoothing = 60;
 
             NetworkServer.Spawn(toy.gameObject);
-            
+
             return toy;
         }
     }
