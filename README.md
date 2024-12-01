@@ -22,12 +22,12 @@ The idea is taken from the [plugin](https://github.com/SynapseSL/Scp1162)
 ```yml
 # What message will be displayed when using Scp-1162? ({dropitem} - Thrown or dropped item. {giveitem} - Changed item. {dropstatus} - Replaces the text written in the points below in dependence on the drop status.)
 item_drop_message:
-  message: <b>You {dropstatus} a <color=green>{dropitem}</color> through <color=yellow>SCP-1162</color>, and received a <color=red>{giveitem}</color></b>
+  message: <b>You {dropstatus} a <color=green>{dropitem}</color> through <color=yellow>Scp-1162</color>, and received a <color=red>{giveitem}</color></b>
   drop_text: dropped
   throw_text: throwed
 # What message will be displayed when item are deleted? ({dropitem} - Thrown or dropped item. {dropstatus} - Replaces the text written in the points below in dependence on the drop status.)
 item_delete_message:
-  message: <b>You {dropstatus} a <color=green>{dropitem}</color> through <color=yellow>SCP-1162</color>, and got <color=red>nothing</color></b>
+  message: <b>You {dropstatus} a <color=green>{dropitem}</color> through <color=yellow>Scp-1162</color>, and got <color=red>nothing</color></b>
   drop_text: dropped
   throw_text: throwed
 # From what distance can Scp-1162 be used?
@@ -90,6 +90,15 @@ allowed_rank:
 # User ID that can use commands for the Scp-1162.
 allowed_user_i_d:
 - SomeOtherSteamId64@steam
+# This option is for a custom SCP-1162 location
+custom_room_locations:
+- room_name_type: Lcz173
+  offset_x: 17
+  offset_y: 13
+  offset_z: 3.58999991
+  rotation_x: 90
+  rotation_y: 0
+  rotation_z: 0
 ```
 ## Wiki
 **Be sure to check out the [Wiki](https://github.com/MrAfitol/SCP-1162/wiki)**
