@@ -1,9 +1,9 @@
+using AdminToys;
+using Mirror;
+using UnityEngine;
+
 namespace SCP1162
 {
-    using AdminToys;
-    using Mirror;
-    using UnityEngine;
-
     // The code is taken from the genius Jesus-QC and little changed by me
     public class SimplifiedToy
     {

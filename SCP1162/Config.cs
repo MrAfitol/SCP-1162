@@ -1,8 +1,9 @@
+using MapGeneration;
+using System.Collections.Generic;
+using System.ComponentModel;
+
 namespace SCP1162
 {
-    using System.Collections.Generic;
-    using System.ComponentModel;
-
     public class Config
     {
         [Description("What message will be displayed when using Scp-1162? ({dropitem} - Thrown or dropped item. {giveitem} - Changed item. {dropstatus} - Replaces the text written in the points below in dependence on the drop status.)")]
@@ -99,6 +100,21 @@ namespace SCP1162
         {
             "SomeOtherSteamId64@steam"
         };
+
+        [Description("This option is for a custom SCP-1162 location")]
+        public List<CustomRoomLocationData> CustomRoomLocations { get; set; } = new List<CustomRoomLocationData>()
+        {
+            new CustomRoomLocationData()
+            {
+                RoomNameType = RoomName.Lcz173,
+                OffsetX = 17f,
+                OffsetY = 13,
+                OffsetZ = 3.59f,
+                RotationX = 90,
+                RotationY = 0,
+                RotationZ = 0,
+            },
+        };
     }
 }
 
@@ -107,4 +123,15 @@ public class ItemMessage
     public string Message { get; set; }
     public string DropText { get; set; }
     public string ThrowText { get; set; }
+}
+
+public class CustomRoomLocationData
+{
+    public RoomName RoomNameType { get; set; }
+    public float OffsetX { get; set; }
+    public float OffsetY { get; set; }
+    public float OffsetZ { get; set; }
+    public float RotationX { get; set; }
+    public float RotationY { get; set; }
+    public float RotationZ { get; set; }
 }

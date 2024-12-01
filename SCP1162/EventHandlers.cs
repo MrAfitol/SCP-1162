@@ -1,21 +1,22 @@
+using AdminToys;
+using CustomPlayerEffects;
+using InventorySystem.Items;
+using InventorySystem.Items.Firearms;
+using InventorySystem.Items.Firearms.Attachments;
+using InventorySystem.Items.Firearms.Modules;
+using InventorySystem.Items.Usables.Scp330;
+using Mirror;
+using PluginAPI.Core;
+using PluginAPI.Core.Attributes;
+using PluginAPI.Core.Items;
+using PluginAPI.Core.Zones;
+using PluginAPI.Events;
+using System.Linq;
+using UnityEngine;
+using Random = UnityEngine.Random;
+
 namespace SCP1162
 {
-    using AdminToys;
-    using CustomPlayerEffects;
-    using InventorySystem.Items;
-    using InventorySystem.Items.Firearms;
-    using InventorySystem.Items.Firearms.Attachments;
-    using InventorySystem.Items.Usables.Scp330;
-    using Mirror;
-    using PluginAPI.Core;
-    using PluginAPI.Core.Attributes;
-    using PluginAPI.Core.Items;
-    using PluginAPI.Core.Zones;
-    using PluginAPI.Events;
-    using System.Linq;
-    using UnityEngine;
-    using Random = UnityEngine.Random;
-
     public class EventHandlers
     {
         private static Vector3 Scp1162Position;
@@ -27,7 +28,7 @@ namespace SCP1162
         }
 
         [PluginEvent]
-        public void OnGenerationMap(MapGeneratedEvent ev)
+        public void OnWaitingForPlayers(WaitingForPlayersEvent ev)
         {
             if (Plugin.Config.Scp1162ChanceToSpawn >= Random.Range(0, 100)) OnSpawnSCP1162();
         }
@@ -80,11 +81,15 @@ namespace SCP1162
                     if (Plugin.Config.RandomAttachments)
                         firearm.ApplyAttachmentsCode(AttachmentsUtils.GetRandomAttachmentsCode(firearm.ItemTypeId), reValidate: true);
 
-                    FirearmStatusFlags firearmStatusFlags = FirearmStatusFlags.MagazineInserted;
-                    if (firearm.HasAdvantageFlag(AttachmentDescriptiveAdvantages.Flashlight))
-                        firearmStatusFlags |= FirearmStatusFlags.FlashlightEnabled;
+                    if (!Plugin.Config.FillMaxAmmo)
+                        return false;
 
-                    firearm.Status = new FirearmStatus((Plugin.Config.FillMaxAmmo ? firearm.AmmoManagerModule.MaxAmmo : (byte)0), firearmStatusFlags, firearm.GetCurrentAttachmentsCode());
+                    if (firearm.TryGetModule<MagazineModule>(out MagazineModule magazineModule))
+                    {
+                        magazineModule.ServerInsertEmptyMagazine();
+                        magazineModule.AmmoStored = magazineModule.AmmoMax;
+                        magazineModule.ServerResyncData();
+                    }
                 }
             }
 
@@ -101,8 +106,10 @@ namespace SCP1162
         {
             if (Scp1162 != null) return;
 
-            var Room = LightZone.Rooms.FirstOrDefault(x => x.GameObject.name == "LCZ_173");
-            Scp1162 = new SimplifiedToy(PrimitiveType.Cylinder, new Vector3(17f, 13f, 3.59f), new Vector3(90f, 0f, 0f),
+            CustomRoomLocationData crldTemp = Plugin.Config.CustomRoomLocations.RandomItem();
+
+            var Room = LightZone.Rooms.FirstOrDefault(x => x.Identifier.Name == crldTemp.RoomNameType);
+            Scp1162 = new SimplifiedToy(PrimitiveType.Cylinder, new Vector3(crldTemp.OffsetX, crldTemp.OffsetY, crldTemp.OffsetZ), new Vector3(crldTemp.RotationX, crldTemp.RotationY, crldTemp.RotationZ),
                 new Vector3(1.3f, 0.1f, 1.3f), Color.black, Room.Transform, 0.95f).Spawn();
 
             Scp1162Position = Scp1162.transform.position;
