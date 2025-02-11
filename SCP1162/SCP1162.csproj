@@ -43,11 +43,11 @@
     <Reference Include="CommandSystem.Core">
       <HintPath>$(SCP_Dependencies)\CommandSystem.Core.dll</HintPath>
     </Reference>
+    <Reference Include="LabApi">
+      <HintPath>$(SCP_Dependencies)\Dependencies\LabApi.dll</HintPath>
+    </Reference>
     <Reference Include="Mirror-Publicized">
       <HintPath>$(SCP_Dependencies)\Mirror-Publicized.dll</HintPath>
-    </Reference>
-    <Reference Include="PluginAPI, Version=13.1.2.0, Culture=neutral, processorArchitecture=AMD64">
-      <HintPath>..\packages\Northwood.PluginAPI.13.1.2\lib\net48\PluginAPI.dll</HintPath>
     </Reference>
     <Reference Include="Pooling">
       <HintPath>$(SCP_Dependencies)\Pooling.dll</HintPath>
@@ -68,21 +68,14 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>$(SCP_Dependencies)\UnityEngine.PhysicsModule.dll</HintPath>
     </Reference>
-    <Reference Include="YamlDotNet, Version=11.0.0.0, Culture=neutral, PublicKeyToken=ec19458f3c15af5e, processorArchitecture=MSIL">
-      <HintPath>..\packages\YamlDotNet.11.0.1\lib\net45\YamlDotNet.dll</HintPath>
-    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Commands\Scp1162.cs" />
     <Compile Include="Config.cs" />
-    <Compile Include="EventHandlers.cs" />
-    <Compile Include="Extensions\PlayerExtensions.cs" />
+    <Compile Include="EventsHandler.cs" />
     <Compile Include="Plugin.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SimplifiedToy.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="packages.config" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

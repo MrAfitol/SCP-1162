@@ -1,6 +1,6 @@
 ﻿using CommandSystem;
-using PluginAPI.Core;
-using SCP1162.Extensions;
+using LabApi.Features.Permissions;
+using LabApi.Features.Wrappers;
 using System;
 
 namespace SCP1162.Commands
@@ -18,7 +18,7 @@ namespace SCP1162.Commands
         {
             Player playerSender = Player.Get(sender);
 
-            if (!IsAllow(playerSender))
+            if (!playerSender.HasAnyPermission("scp1162.*", "scp1162.control"))
             {
                 response = $"You don't have permission to use this command!";
                 return false;
@@ -33,21 +33,21 @@ namespace SCP1162.Commands
             switch (arguments.At(0))
             {
                 case "spawn":
-                    if (EventHandlers.IsScp1162Spawn)
+                    if (EventsHandler.IsScp1162Spawn)
                     {
                         response = "Scp-1162 has already spawned";
                         return true;
                     }
                     else
                     {
-                        EventHandlers.OnSpawnSCP1162();
+                        EventsHandler.OnSpawnSCP1162();
                         response = "Scp-1162 has been spawned";
                         return true;
                     }
                 case "despawn":
-                    if (EventHandlers.IsScp1162Spawn)
+                    if (EventsHandler.IsScp1162Spawn)
                     {
-                        EventHandlers.OnDespawnSCP1162();
+                        EventsHandler.OnDespawnSCP1162();
                         response = "Scp-1162 has been despawned";
                         return true;
                     }
@@ -60,26 +60,6 @@ namespace SCP1162.Commands
                     response = "Incorrect command, use: \n.scp1162 spawn \n.scp1162 despawn";
                     return false;
             }
-        }
-
-        private bool IsAllow(Player player) => IsAllowFromRank(player) || IsAllowFromUserID(player);
-
-        private bool IsAllowFromUserID(Player player)
-        {
-            if (!string.IsNullOrEmpty(player.UserId))
-                if (Plugin.Config.AllowedUserID?.Count > 0)
-                    if (Plugin.Config.AllowedUserID.Contains(player.UserId))
-                        return true;
-            return false;
-        }
-
-        private bool IsAllowFromRank(Player player)
-        {
-            if (!string.IsNullOrEmpty(player.GetGroupName()))
-                if (Plugin.Config.AllowedRank?.Count > 0)
-                    if (Plugin.Config.AllowedRank.Contains(player.GetGroupName()))
-                        return true;
-            return false;
         }
     }
 }

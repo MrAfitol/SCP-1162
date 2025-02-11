@@ -89,18 +89,6 @@ namespace SCP1162
         [Description("Will the gun have a random attachments?")]
         public bool RandomAttachments { get; set; } = true;
 
-        [Description("The name of the role that can use commands for Scp-1162.")]
-        public List<string> AllowedRank { get; set; } = new List<string>()
-        {
-            "owner"
-        };
-
-        [Description("User ID that can use commands for the Scp-1162.")]
-        public List<string> AllowedUserID { get; set; } = new List<string>()
-        {
-            "SomeOtherSteamId64@steam"
-        };
-
         [Description("This option is for a custom SCP-1162 location")]
         public List<CustomRoomLocationData> CustomRoomLocations { get; set; } = new List<CustomRoomLocationData>()
         {
