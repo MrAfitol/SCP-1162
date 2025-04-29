@@ -1,4 +1,3 @@
-using AdminToys;
 using CustomPlayerEffects;
 using InventorySystem.Items;
 using InventorySystem.Items.Firearms;
@@ -8,16 +7,17 @@ using InventorySystem.Items.Usables.Scp330;
 using LabApi.Events.Arguments.PlayerEvents;
 using LabApi.Features.Wrappers;
 using MapGeneration;
-using Mirror;
+using System;
 using System.Linq;
 using UnityEngine;
+using PrimitiveObjectToy = LabApi.Features.Wrappers.PrimitiveObjectToy;
 using Random = UnityEngine.Random;
 
 namespace SCP1162
 {
     public class EventsHandler
     {
-        private static Vector3 Scp1162Position;
+        public static Vector3 Scp1162Position;
         private static PrimitiveObjectToy Scp1162;
 
         public static bool IsScp1162Spawn
@@ -101,19 +101,35 @@ namespace SCP1162
             if (Scp1162 != null) return;
 
             CustomRoomLocationData crldTemp = Plugin.Instance.Config.CustomRoomLocations.RandomItem();
+            RoomIdentifier Room = null;
 
-            var Room = RoomIdentifier.AllRoomIdentifiers.FirstOrDefault(x => x.Name == crldTemp.RoomNameType);
-            Scp1162 = new SimplifiedToy(PrimitiveType.Cylinder, new Vector3(crldTemp.OffsetX, crldTemp.OffsetY, crldTemp.OffsetZ), new Vector3(crldTemp.RotationX, crldTemp.RotationY, crldTemp.RotationZ),
-                new Vector3(1.3f, 0.1f, 1.3f), Color.black, Room.transform, 0.95f).Spawn();
+            if (Enum.TryParse<RoomName>(crldTemp.RoomNameType, out RoomName roomName))
+                Room = RoomIdentifier.AllRoomIdentifiers.First(x => x.Name == roomName);
+            else if (RoomIdentifier.AllRoomIdentifiers.Count(x => x.name.Contains(crldTemp.RoomNameType)) > 0)
+                Room = RoomIdentifier.AllRoomIdentifiers.First(x => x.name.Contains(crldTemp.RoomNameType));
 
-            Scp1162Position = Scp1162.transform.position;
+            GameObject offsetPoint = new GameObject("Point-1162");
+            offsetPoint.transform.SetParent(Room.transform);
+            offsetPoint.transform.localPosition = new Vector3(crldTemp.OffsetX, crldTemp.OffsetY, crldTemp.OffsetZ);
+            offsetPoint.transform.localRotation = Quaternion.Euler(crldTemp.RotationX, crldTemp.RotationY, crldTemp.RotationZ);
+            Scp1162 = PrimitiveObjectToy.Create(Vector3.zero,
+                Quaternion.Euler(crldTemp.RotationX, crldTemp.RotationY, crldTemp.RotationZ), new Vector3(1.3f, 0.1f, 1.3f), null, false);
+            Scp1162.Position = offsetPoint.transform.position;
+            Scp1162.Rotation = offsetPoint.transform.rotation;
+            Scp1162.Type = PrimitiveType.Cylinder;
+            Scp1162.Color = Color.black * 0.95f;
+            Scp1162.IsStatic = true;
+            Scp1162.Spawn();
+            GameObject.Destroy(offsetPoint);
+
+            Scp1162Position = Scp1162.Position;
         }
 
         public static void OnDespawnSCP1162()
         {
             if (Scp1162 == null) return;
 
-            NetworkServer.Destroy(Scp1162.gameObject);
+            Scp1162.Destroy();
             Scp1162 = null;
         }
     }

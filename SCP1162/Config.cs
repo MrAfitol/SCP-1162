@@ -1,4 +1,3 @@
-using MapGeneration;
 using System.Collections.Generic;
 using System.ComponentModel;
 
@@ -94,7 +93,7 @@ namespace SCP1162
         {
             new CustomRoomLocationData()
             {
-                RoomNameType = RoomName.Lcz173,
+                RoomNameType = "LCZ_173",
                 OffsetX = 17f,
                 OffsetY = 13,
                 OffsetZ = 3.59f,
@@ -115,7 +114,7 @@ public class ItemMessage
 
 public class CustomRoomLocationData
 {
-    public RoomName RoomNameType { get; set; }
+    public string RoomNameType { get; set; }
     public float OffsetX { get; set; }
     public float OffsetY { get; set; }
     public float OffsetZ { get; set; }
