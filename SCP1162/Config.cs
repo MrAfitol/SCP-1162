@@ -93,7 +93,7 @@ namespace SCP1162
         {
             new CustomRoomLocationData()
             {
-                RoomNameType = "LCZ_173",
+                RoomNameType = "Lcz173",
                 OffsetX = 17f,
                 OffsetY = 13,
                 OffsetZ = 3.59f,
