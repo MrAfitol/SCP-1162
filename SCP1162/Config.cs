@@ -33,8 +33,11 @@ namespace SCP1162
         [Description("What is the chance that the item will be deleted. (Set to 0 to disable)")]
         public int DeleteChance { get; set; } = 10;
 
-        [Description("If this item is enabled, the hands will not be cut off only when the player threw item.")]
+        [Description("If this item is true, the hands will not be cut off only when the player threw item.")]
         public bool IgnoreThrow { get; set; } = true;
+
+        [Description("If the parameter is true, the SCP-3114 will not be able to use the SCP-1162.")]
+        public bool IgnoreScp3114 { get; set; } = false;
 
         [Description("List of items that may drop from Scp-1162.")]
         public List<ItemType> DroppingItems { get; set; } = new List<ItemType>

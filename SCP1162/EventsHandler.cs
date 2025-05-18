@@ -8,6 +8,7 @@ using LabApi.Events.Arguments.PlayerEvents;
 using LabApi.Features.Wrappers;
 using MapGeneration;
 using Mirror;
+using PlayerRoles;
 using System;
 using System.Linq;
 using UnityEngine;
@@ -39,7 +40,7 @@ namespace SCP1162
 
         private bool OnUseSCP1162(Player player, ItemBase item, bool isThrow)
         {
-            if (!IsScp1162Spawn || !Round.IsRoundStarted || Vector3.Distance(_scp1162Position, player.Position) > Plugin.Instance.Config.Scp1162Distance || item is Scp330Bag)
+            if (!IsScp1162Spawn || !Round.IsRoundStarted || Vector3.Distance(_scp1162Position, player.Position) > Plugin.Instance.Config.Scp1162Distance || item is Scp330Bag || (player.Role == RoleTypeId.Scp3114 && Plugin.Instance.Config.IgnoreScp3114))
                 return true;
 
             if (Plugin.Instance.Config.CuttingChance > 0 && (!isThrow || !Plugin.Instance.Config.IgnoreThrow))
