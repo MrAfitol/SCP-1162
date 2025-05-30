@@ -37,7 +37,7 @@ scp1162_chance_to_spawn: 100
 # What is the chance that the hands will be cut off if the item is not in the hands. (Set to 0 to disable)
 cutting_chance: 30
 # What is the chance that the item will be deleted. (Set to 0 to disable)
-delete_chance: 0
+delete_chance: 10
 # If this item is true, the hands will not be cut off only when the player threw item.
 ignore_throw: true
 # If the parameter is true, the SCP-3114 will not be able to use the SCP-1162.
