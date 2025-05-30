@@ -1,10 +1,10 @@
-using AdminToys;
+﻿using AdminToys;
 using Mirror;
 using UnityEngine;
 
 namespace SCP1162
 {
-    // The code is taken from the genius Jesus-QC and little changed by me
+    // The code was originally created by the brilliant Jesus-QC and has been slightly modified by me.
     public class SimplifiedToy
     {
         /// <summary>
@@ -93,7 +93,7 @@ namespace SCP1162
 
             toy.NetworkPrimitiveType = Type;
 
-            if (Parent != null) toy.transform.parent = Parent;
+            if (Parent != null) toy.transform.SetParent(Parent);
 
             toy.transform.localPosition = Position;
             toy.transform.localEulerAngles = Rotation;
