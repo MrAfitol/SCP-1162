@@ -52,7 +52,7 @@ namespace SCP1162
                 }
             }
 
-            if (Plugin.Instance.Config.DeleteChance >= Random.Range(1, 101))
+            if (Plugin.Instance.Config.DeleteChance > 0 && Plugin.Instance.Config.DeleteChance >= Random.Range(1, 101))
             {
                 player.RemoveItem(item);
                 player.SendHint(Plugin.Instance.Config.ItemDeleteMessage.Message
@@ -99,17 +99,20 @@ namespace SCP1162
             CustomRoomLocationData crldTemp = Plugin.Instance.Config.CustomRoomLocations.RandomItem();
             RoomIdentifier room = null;
 
-            if (Enum.TryParse<RoomName>(crldTemp.RoomNameType, out RoomName roomName)) room = RoomIdentifier.AllRoomIdentifiers.First(x => x.Name == roomName);
-            else room = RoomIdentifier.AllRoomIdentifiers.First(x => x.name.Contains(crldTemp.RoomNameType));
-
-            if (room == null)
+            if (crldTemp.RoomNameType != "Static")
             {
-                Logger.Warn($"Room not found for SCP-1162 spawn: {crldTemp.RoomNameType}");
-                return;
+                if (Enum.TryParse<RoomName>(crldTemp.RoomNameType, out RoomName roomName)) room = RoomIdentifier.AllRoomIdentifiers.First(x => x.Name == roomName);
+                else room = RoomIdentifier.AllRoomIdentifiers.First(x => x.name.Contains(crldTemp.RoomNameType));
+
+                if (room == null)
+                {
+                    Logger.Warn($"Room not found for SCP-1162 spawn: {crldTemp.RoomNameType}");
+                    return;
+                }
             }
 
             GameObject point = new GameObject("Point-1162");
-            point.transform.SetParent(room.transform);
+            if (room != null) point.transform.SetParent(room.transform);
             point.transform.localPosition = new Vector3(crldTemp.OffsetX, crldTemp.OffsetY, crldTemp.OffsetZ);
             point.transform.localRotation = Quaternion.Euler(crldTemp.RotationX, crldTemp.RotationY, crldTemp.RotationZ);
 
