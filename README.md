@@ -11,7 +11,7 @@ The idea is taken from the [plugin](https://github.com/SynapseSL/Scp1162)
    
    *("C:\Users\(user name)\AppData\Roaming\SCP Secret Laboratory\" for windows, "/home/(user name)/.config/SCP Secret Laboratory/" for linux)*
   
-   - *2. Find the "PluginAPI" folder there, it contains the "plugins" folder.*
+   - *2. Find the "LabAPI" folder there, it contains the "plugins" folder.*
   
    - *3. Select either the port of your server to install the same on that server or the "global" folder to install the plugin for all servers*
   
@@ -37,9 +37,11 @@ scp1162_chance_to_spawn: 100
 # What is the chance that the hands will be cut off if the item is not in the hands. (Set to 0 to disable)
 cutting_chance: 30
 # What is the chance that the item will be deleted. (Set to 0 to disable)
-delete_chance: 10
-# If this item is enabled, the hands will not be cut off only when the player threw item.
+delete_chance: 0
+# If this item is true, the hands will not be cut off only when the player threw item.
 ignore_throw: true
+# If the parameter is true, the SCP-3114 will not be able to use the SCP-1162.
+ignore_scp3114: false
 # List of items that may drop from Scp-1162.
 dropping_items:
 - SCP500
@@ -84,12 +86,6 @@ items_name:
 fill_max_ammo: true
 # Will the gun have a random attachments?
 random_attachments: true
-# The name of the role that can use commands for Scp-1162.
-allowed_rank:
-- owner
-# User ID that can use commands for the Scp-1162.
-allowed_user_i_d:
-- SomeOtherSteamId64@steam
 # This option is for a custom SCP-1162 location
 custom_room_locations:
 - room_name_type: Lcz173
